@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Carga } from './screens/Carga';
 import { SolicitarCarga } from './screens/SolicitarCarga';
 import { MontacargaAsignados } from './screens/MontacargaAsignados';
+import MenuCarril from './screens/MenuCarril';
 
 export default function App() {
 
@@ -12,7 +13,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name = 'Inicio' component={ValidarQR}  />
+        <Stack.Screen name = 'Inicio' component={MenuCarril}  />
         <Stack.Screen name = 'Cargando' component={Carga} />
         <Stack.Screen name= 'Solicitar Carga' component={SolicitarCarga} />
         <Stack.Screen name= 'Montacargas Asignados' component={MontacargaAsignados} />
