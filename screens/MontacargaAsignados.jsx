@@ -1,72 +1,133 @@
+import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
+import { useListarElementos } from "../Hooks/CRUDHooks";
+import { carrilesURL, salidaConductorURL } from "../API/urlsApi";
+import globalStyles from "../Styles/general";
+import axios from "axios";
+import { useRedirectEffect } from "../Hooks/useRedirectEffect";
 
 export function MontacargaAsignados() {
   const [cargaRealizadaMontacarga1, setCargaRealizadaMontacarga1] =
     useState(false);
   const [cargaRealizadaMontacarga2, setCargaRealizadaMontacarga2] =
     useState(false);
-  const [salidaConfirmada, setSalidaConfirmada] = useState(false); // Estado para la salida confirmada
+  const [salidaConfirmada, setSalidaConfirmada] = useState(false);
+
+  const route = useRoute();
+  const { carrilId } = route.params;
+
+  const [carril, setCarril] = useState();
+  useListarElementos(`${carrilesURL}/${carrilId}`, carril, setCarril);
+
+  useRedirectEffect(carril, 3);
+
+  const ConfirmarSalida = async () => {
+    const requestData = {
+      salida: 1,
+    };
+    console.log(`${salidaConductorURL}${carrilId}`);
+    console.log(requestData);
+    await axios.put(`${salidaConductorURL}${carrilId}`, requestData);
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Montacargas asignados: 2</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title={
-            cargaRealizadaMontacarga1
-              ? "Montacarga 1: Carga realizada"
-              : "Montacarga 1: Realizando carga"
-          }
-          buttonStyle={[
-            styles.button,
-            cargaRealizadaMontacarga1 ? styles.cargaRealizadaButton : null,
-          ]}
-          onPress={() => setCargaRealizadaMontacarga1(true)}
-        />
-        <Button
-          title={
-            cargaRealizadaMontacarga2
-              ? "Montacarga 2: Carga realizada"
-              : "Montacarga 2: Realizando carga"
-          }
-          buttonStyle={[
-            styles.button,
-            cargaRealizadaMontacarga2 ? styles.cargaRealizadaButton : null,
-          ]}
-          onPress={() => setCargaRealizadaMontacarga2(true)}
-        />
-      </View>
-      <Text style={styles.instructions}>
-        Por favor espere a que se termine de realizar la carga
-      </Text>
+      {carril && (
+        <>
+          <Text style={globalStyles.title}>Carril {carril.nombre}</Text>
+          <Text style={globalStyles.title}>
+            Montacargas asignados: {carril.cantidadMontacargas}
+          </Text>
+          <View style={styles.buttonContainer}>
+            {carril.cantidadMontacargas === 1 && (
+              <Button
+                title={
+                  carril.finMontacarga1
+                    ? "Montacarga 1: Carga realizada"
+                    : "Montacarga 1: Realizando carga"
+                }
+                buttonStyle={[
+                  styles.button,
+                  carril.finMontacarga1 ? styles.cargaRealizadaButton : null,
+                ]}
+                onPress={() => setCargaRealizadaMontacarga1(true)}
+              />
+            )}
 
-      <Text style={styles.securityText}>
-        El auxiliar de seguridad debe confirmar el término de la carga y retiro de trabaruedas
-      </Text>
-      <Text style={styles.finDeCarga}>
-        {cargaRealizadaMontacarga1 && cargaRealizadaMontacarga2
-          ? "Fin de carga: Confirmado"
-          : "Fin de carga: No confirmado"}
-      </Text>
-      <Button
-        title={
-          cargaRealizadaMontacarga1 && cargaRealizadaMontacarga2
-            ? "Confirmar salida"
-            : "Espere a que se confirme fin de carga"
-        }
-        buttonStyle={[
-          styles.salidaButton,
-          cargaRealizadaMontacarga1 && cargaRealizadaMontacarga2 ? styles.salidaConfirmadaButton : null, // Estilo condicional
-        ]}
-        onPress={() => setSalidaConfirmada(true)} // Simular la confirmación de salida
-      />
-      {cargaRealizadaMontacarga1 && cargaRealizadaMontacarga2 ? (
-        <Text style={styles.precaucionText}>
-          Recuerde por precaución mire sus espejos antes de salir
-        </Text>
-      ) : null}
+            {carril.cantidadMontacargas === 2 && (
+              <>
+                <Button
+                  title={
+                    carril.finMontacarga1
+                      ? "Montacarga 1: Carga realizada"
+                      : "Montacarga 1: Realizando carga"
+                  }
+                  buttonStyle={[
+                    styles.button,
+                    carril.finMontacarga1 ? styles.cargaRealizadaButton : null,
+                  ]}
+                  onPress={() => setCargaRealizadaMontacarga1(true)}
+                />
+
+                <Button
+                  title={
+                    carril.finMontacarga2
+                      ? "Montacarga 2: Carga realizada"
+                      : "Montacarga 2: Realizando carga"
+                  }
+                  buttonStyle={[
+                    styles.button,
+                    carril.finMontacarga2 ? styles.cargaRealizadaButton : null,
+                  ]}
+                  onPress={() => setCargaRealizadaMontacarga2(true)}
+                />
+              </>
+            )}
+          </View>
+
+          <Text style={styles.instructions}>
+            Por favor espere a que se termine de realizar la carga
+          </Text>
+
+          <Text style={styles.securityText}>
+            El auxiliar de seguridad debe confirmar el término de la carga y
+            retiro de trabaruedas
+          </Text>
+          <Text style={styles.finDeCarga}>
+            {carril.finAuxiliar
+              ? "Fin de carga: Confirmado"
+              : "Fin de carga: No confirmado"}
+          </Text>
+          <Text style={styles.finDeCarga}>
+            {carril.salida
+              ? "Salida del conductor: Confirmado"
+              : "Salida del conductor: No confirmado"}
+          </Text>
+          {carril.salida === 0 ||
+            (!carril.salida && (
+              <Button
+                title={
+                  carril.finAuxiliar
+                    ? "Confirmar salida"
+                    : "Espere a que se confirme fin de carga"
+                }
+                buttonStyle={[
+                  styles.salidaButton,
+                  carril.finAuxiliar ? styles.salidaConfirmadaButton : null, // Estilo condicional
+                ]}
+                onPress={() => ConfirmarSalida()} // Simular la confirmación de salida
+              />
+            ))}
+
+          {carril.salida ? (
+            <Text style={styles.precaucionText}>
+              Recuerde por precaución mire sus espejos antes de salir
+            </Text>
+          ) : null}
+        </>
+      )}
     </View>
   );
 }

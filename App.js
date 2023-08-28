@@ -6,6 +6,9 @@ import { Carga } from './screens/Carga';
 import { SolicitarCarga } from './screens/SolicitarCarga';
 import { MontacargaAsignados } from './screens/MontacargaAsignados';
 import MenuCarril from './screens/MenuCarril';
+import MenuCarrilApi from './screens/MenuCarrilApi';
+import { CarrilLibre } from './screens/CarrilLibre';
+import { CarrilPendiente } from './screens/CarrilPendiente';
 
 export default function App() {
 
@@ -13,8 +16,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name = 'Inicio' component={MenuCarril}  />
+        <Stack.Screen name = 'Inicio' component={MenuCarrilApi}  />
         <Stack.Screen name = 'Cargando' component={Carga} />
+        <Stack.Screen name = 'Libre' component={CarrilLibre} />
+        <Stack.Screen name = 'Pendiente' component={CarrilPendiente} />
         <Stack.Screen name= 'Solicitar Carga' component={SolicitarCarga} />
         <Stack.Screen name= 'Montacargas Asignados' component={MontacargaAsignados} />
       </Stack.Navigator>
