@@ -7,6 +7,7 @@ import { carrilesURL, salidaConductorURL } from "../API/urlsApi";
 import globalStyles from "../Styles/general";
 import axios from "axios";
 import { useRedirectEffect } from "../Hooks/useRedirectEffect";
+import { calcularTiempoTotal, formateoTiempo } from "../Hooks/timeUtils";
 
 export function MontacargaAsignados() {
   const [cargaRealizadaMontacarga1, setCargaRealizadaMontacarga1] =
@@ -24,12 +25,14 @@ export function MontacargaAsignados() {
   useRedirectEffect(carril, 3);
 
   const ConfirmarSalida = async () => {
-    const requestData = {
-      salida: 1,
-    };
-    console.log(`${salidaConductorURL}${carrilId}`);
-    console.log(requestData);
-    await axios.put(`${salidaConductorURL}${carrilId}`, requestData);
+    if (carril.finAuxiliar) {
+      const requestData = {
+        salida: 1,
+      };
+      console.log(`${salidaConductorURL}${carrilId}`);
+      console.log(requestData);
+      await axios.put(`${salidaConductorURL}${carrilId}`, requestData);
+    }
   };
 
   return (
@@ -40,6 +43,35 @@ export function MontacargaAsignados() {
           <Text style={globalStyles.title}>
             Montacargas asignados: {carril.cantidadMontacargas}
           </Text>
+
+          <Text style={styles.securityText}>
+            Estado: {carril.estadosModel.nombre}{" "}
+          </Text>
+          <Text style={styles.securityText}>
+            Hora Inicio:{" "}
+            {carril.horaInicio ? formateoTiempo(carril.horaInicio) : "--"}
+          </Text>
+          {carril.horaFin && (
+            <Text style={styles.securityText}>
+              Hora Fin: {carril.horaFin ? formateoTiempo(carril.horaFin) : "--"}{" "}
+            </Text>
+          )}
+
+          <Text style={styles.securityText}>
+            TIempo total:{" "}
+            {carril.horaInicio && carril.horaFin && (
+              <Text>
+                {calcularTiempoTotal(carril.horaInicio, carril.horaFin).minutos}
+                :
+                {
+                  calcularTiempoTotal(carril.horaInicio, carril.horaFin)
+                    .segundos
+                }{" "}
+                minutos
+              </Text>
+            )}
+          </Text>
+
           <View style={styles.buttonContainer}>
             {carril.cantidadMontacargas === 1 && (
               <Button

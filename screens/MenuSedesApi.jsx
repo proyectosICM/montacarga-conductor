@@ -6,7 +6,7 @@ import { Button } from "react-native-elements";
 import { carrilesURL } from "../API/urlsApi.jsx";
 import { useListarElementos } from "../Hooks/CRUDHooks";
 
-export function MenuCarrilApi() {
+export function MenuSedesApi() {
   const navigation = useNavigation();
 
   const Detalles = (estado, dato) => {
@@ -55,7 +55,7 @@ export function MenuCarrilApi() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Por favor seleccione el carril en el que se encuentra</Text>
+      <Text style={styles.title}>Por favor seleccione la sede donde se encuentra</Text>
       <FlatList
         data={carriles}
         keyExtractor={(item) => item.id.toString()}
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuCarrilApi;
+export default MenuSedesApi;
