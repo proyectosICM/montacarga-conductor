@@ -1,7 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FlatList, ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Button } from "react-native-elements";
 import { carrilesURL } from "../API/urlsApi.jsx";
 import { useListarElementos } from "../Hooks/CRUDHooks";
@@ -26,19 +32,6 @@ export function MenuCarrilApi() {
   };
 
   const [carriles, setCarriles] = useState();
-  /*
-  const ListarCarriles = async () => {
-    try {
-      const response = await axios.get(carrilesURL);
-      setCarriles(response.data);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    }
-  };*/
-
-  /* useEffect(() => {
-    ListarCarriles();
-  }, [ListarCarriles]);*/
 
   useListarElementos(carrilesURL, carriles, setCarriles);
 
@@ -50,27 +43,31 @@ export function MenuCarrilApi() {
     } else if (estadoId === 3) {
       return styles.ocupadoButton;
     }
-    return styles.libreButton; // Por defecto
+    return styles.libreButton; 
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Por favor seleccione el carril en el que se encuentra</Text>
+      <Text style={styles.title}>
+        Por favor seleccione el carril en el que se encuentra
+      </Text>
       <FlatList
         data={carriles}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2} // Esto establece que habrá dos columnas
+        //keyExtractor={(item) => item.id.toString()}
+        numColumns={2} 
         renderItem={({ item }) => (
           <View style={styles.column}>
-            <Button
-              title={`${item.id} - ${item.estadosModel.nombre} ${
-                item.cantidadMontacargas
-                  ? ` - ${item.cantidadMontacargas} Montacargas `
-                  : ""
-              } `}
-              buttonStyle={getButtonStyle(item.estadosModel.id)}
-              onPress={() => Detalles(item.estadosModel.id, item.id)}
-            />
+            {item && (
+              <Button
+                title={`${item.id} - ${item.estadosModel.nombre} ${
+                  item.cantidadMontacargas
+                    ? ` - ${item.cantidadMontacargas} Montacargas `
+                    : ""
+                } `}
+                buttonStyle={getButtonStyle(item.estadosModel.id)}
+                onPress={() => Detalles(item.estadosModel.id, item.id)}
+              />
+            )}
           </View>
         )}
       />
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
-    padding: 15
+    padding: 15,
   },
   row: {
     flexDirection: "row",

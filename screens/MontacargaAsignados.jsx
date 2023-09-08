@@ -27,7 +27,7 @@ export function MontacargaAsignados() {
   const ConfirmarSalida = async () => {
     if (carril.finAuxiliar) {
       const requestData = {
-        salida: 1,
+        salida: true,
       };
       console.log(`${salidaConductorURL}${carrilId}`);
       console.log(requestData);
@@ -43,7 +43,7 @@ export function MontacargaAsignados() {
           <Text style={globalStyles.title}>
             Montacargas asignados: {carril.cantidadMontacargas}
           </Text>
-
+ 
           <Text style={styles.securityText}>
             Estado: {carril.estadosModel.nombre}{" "}
           </Text>
@@ -73,12 +73,13 @@ export function MontacargaAsignados() {
           </Text>
 
           <View style={styles.buttonContainer}>
+  
             {carril.cantidadMontacargas === 1 && (
               <Button
                 title={
                   carril.finMontacarga1
-                    ? "Montacarga 1: Carga realizada"
-                    : "Montacarga 1: Realizando carga"
+                  ? `Montacarga 1 - Placa ${carril.placa1} - Libre `
+                  : `Montacarga 1 - Placa ${carril.placa1} - Cargando mercaderia `
                 }
                 buttonStyle={[
                   styles.button,
@@ -93,8 +94,8 @@ export function MontacargaAsignados() {
                 <Button
                   title={
                     carril.finMontacarga1
-                      ? "Montacarga 1: Carga realizada"
-                      : "Montacarga 1: Realizando carga"
+                    ? `Montacarga 1 - Placa ${carril.placa1} - Libre `
+                    : `Montacarga 1 - Placa ${carril.placa1} - Cargando mercaderia `
                   }
                   buttonStyle={[
                     styles.button,
@@ -106,8 +107,8 @@ export function MontacargaAsignados() {
                 <Button
                   title={
                     carril.finMontacarga2
-                      ? "Montacarga 2: Carga realizada"
-                      : "Montacarga 2: Realizando carga"
+                    ? `Montacarga 2 - Placa ${carril.placa2} - Libre `
+                    : `Montacarga 2 - Placa ${carril.placa2} - Cargando mercaderia `
                   }
                   buttonStyle={[
                     styles.button,
@@ -124,8 +125,7 @@ export function MontacargaAsignados() {
           </Text>
 
           <Text style={styles.securityText}>
-            El auxiliar de seguridad debe confirmar el término de la carga y
-            retiro de trabaruedas
+            Espere a que el sensor detecte que se a terminado de realizar la carga
           </Text>
           <Text style={styles.finDeCarga}>
             {carril.finAuxiliar
