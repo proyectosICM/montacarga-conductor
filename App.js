@@ -1,18 +1,19 @@
 import React from 'react';
-import { ValidarQR } from './screens/ValidarQR';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Carga } from './screens/Carga';
 import { SolicitarCarga } from './screens/SolicitarCarga';
 import { MontacargaAsignados } from './screens/MontacargaAsignados';
-import MenuCarril from './screens/MenuCarril';
 import MenuCarrilApi from './screens/MenuCarrilApi';
 import { CarrilLibre } from './screens/CarrilLibre';
 import { CarrilPendiente } from './screens/CarrilPendiente';
 
+const Stack = createNativeStackNavigator();
+
 export default function App() {
 
-  const Stack = createNativeStackNavigator();
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
