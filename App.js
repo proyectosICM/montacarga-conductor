@@ -16,7 +16,8 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+          initialRouteName='Inicio'>
         <Stack.Screen name = 'Inicio' component={MenuCarrilApi}  />
         <Stack.Screen name = 'Cargando' component={Carga} />
         <Stack.Screen name = 'Libre' component={CarrilLibre} />
