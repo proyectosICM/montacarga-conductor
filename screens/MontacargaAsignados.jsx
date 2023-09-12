@@ -1,5 +1,5 @@
 import { useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { useListarElementos } from "../Hooks/CRUDHooks";
@@ -10,15 +10,10 @@ import { useRedirectEffect } from "../Hooks/useRedirectEffect";
 import { calcularTiempoTotal, formateoTiempo } from "../Hooks/timeUtils";
 
 export function MontacargaAsignados() {
-  const [cargaRealizadaMontacarga1, setCargaRealizadaMontacarga1] =
-    useState(false);
-  const [cargaRealizadaMontacarga2, setCargaRealizadaMontacarga2] =
-    useState(false);
-  const [salidaConfirmada, setSalidaConfirmada] = useState(false);
 
   const route = useRoute();
   const { carrilId } = route.params;
-
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [carril, setCarril] = useState();
   useListarElementos(`${carrilesURL}/${carrilId}`, carril, setCarril);
 
@@ -35,6 +30,30 @@ export function MontacargaAsignados() {
     }
   };
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (secondsRemaining > 0) {
+        setSecondsRemaining(secondsRemaining - 1);
+
+        if (secondsRemaining == 1) {
+          await axios.put(`${cambiarEstadoURL}${carrilId}/1`);
+        }
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [secondsRemaining]);
+
+  useEffect(() => {
+    if (carril && carril.salida) {
+      if (secondsRemaining == 0) {
+        setSecondsRemaining(10);
+      }
+    }
+  }, [carril]);
+
   return (
     <View style={styles.container}>
       {carril && (
@@ -43,7 +62,7 @@ export function MontacargaAsignados() {
           <Text style={globalStyles.title}>
             Montacargas asignados: {carril.cantidadMontacargas}
           </Text>
- 
+
           <Text style={styles.securityText}>
             Estado: {carril.estadosModel.nombre}{" "}
           </Text>
@@ -52,40 +71,43 @@ export function MontacargaAsignados() {
             {carril.horaInicio ? formateoTiempo(carril.horaInicio) : "--"}
           </Text>
           {carril.horaFin && (
-            <Text style={styles.securityText}>
-              Hora Fin: {carril.horaFin ? formateoTiempo(carril.horaFin) : "--"}{" "}
-            </Text>
+            <>
+              <Text style={styles.securityText}>
+                Hora Fin:{" "}
+                {carril.horaFin ? formateoTiempo(carril.horaFin) : "--"}{" "}
+              </Text>
+              <Text style={styles.securityText}>
+                Tiempo total:{" "}
+                {carril.horaInicio && carril.horaFin && (
+                  <Text>
+                    {
+                      calcularTiempoTotal(carril.horaInicio, carril.horaFin)
+                        .minutos
+                    }
+                    :
+                    {
+                      calcularTiempoTotal(carril.horaInicio, carril.horaFin)
+                        .segundos
+                    }{" "}
+                    minutos
+                  </Text>
+                )}
+              </Text>
+            </>
           )}
 
-          <Text style={styles.securityText}>
-            TIempo total:{" "}
-            {carril.horaInicio && carril.horaFin && (
-              <Text>
-                {calcularTiempoTotal(carril.horaInicio, carril.horaFin).minutos}
-                :
-                {
-                  calcularTiempoTotal(carril.horaInicio, carril.horaFin)
-                    .segundos
-                }{" "}
-                minutos
-              </Text>
-            )}
-          </Text>
-
           <View style={styles.buttonContainer}>
-  
             {carril.cantidadMontacargas === 1 && (
               <Button
                 title={
                   carril.finMontacarga1
-                  ? `Montacarga 1 - Placa ${carril.placa1} - Libre `
-                  : `Montacarga 1 - Placa ${carril.placa1} - Cargando mercaderia `
+                    ? `Montacarga 1 Carga terminada `
+                    : `Montacarga 1 Cargando mercaderia `
                 }
                 buttonStyle={[
                   styles.button,
                   carril.finMontacarga1 ? styles.cargaRealizadaButton : null,
                 ]}
-                onPress={() => setCargaRealizadaMontacarga1(true)}
               />
             )}
 
@@ -94,38 +116,33 @@ export function MontacargaAsignados() {
                 <Button
                   title={
                     carril.finMontacarga1
-                    ? `Montacarga 1 - Placa ${carril.placa1} - Libre `
-                    : `Montacarga 1 - Placa ${carril.placa1} - Cargando mercaderia `
+                      ? `Montacarga 1 Carga terminada `
+                      : `Montacarga 1 Cargando mercaderia `
                   }
                   buttonStyle={[
                     styles.button,
                     carril.finMontacarga1 ? styles.cargaRealizadaButton : null,
                   ]}
-                  onPress={() => setCargaRealizadaMontacarga1(true)}
                 />
 
                 <Button
                   title={
                     carril.finMontacarga2
-                    ? `Montacarga 2 - Placa ${carril.placa2} - Libre `
-                    : `Montacarga 2 - Placa ${carril.placa2} - Cargando mercaderia `
+                      ? `Montacarga 2 Carga terminada `
+                      : `Montacarga 2 Cargando mercaderia `
                   }
                   buttonStyle={[
                     styles.button,
                     carril.finMontacarga2 ? styles.cargaRealizadaButton : null,
                   ]}
-                  onPress={() => setCargaRealizadaMontacarga2(true)}
                 />
               </>
             )}
           </View>
 
-          <Text style={styles.instructions}>
-            Por favor espere a que se termine de realizar la carga
-          </Text>
-
           <Text style={styles.securityText}>
-            Espere a que el sensor detecte que se a terminado de realizar la carga
+            Espere a que el sensor detecte que se a terminado de realizar la
+            carga
           </Text>
           <Text style={styles.finDeCarga}>
             {carril.finAuxiliar
@@ -152,7 +169,6 @@ export function MontacargaAsignados() {
                 onPress={() => ConfirmarSalida()} // Simular la confirmación de salida
               />
             ))}
-
           {carril.salida ? (
             <Text style={styles.precaucionText}>
               Recuerde por precaución mire sus espejos antes de salir
