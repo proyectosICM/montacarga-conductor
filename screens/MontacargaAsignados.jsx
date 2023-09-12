@@ -171,7 +171,7 @@ export function MontacargaAsignados() {
             ))}
           {carril.salida ? (
             <Text style={styles.precaucionText}>
-              Recuerde por precaución mire sus espejos antes de salir
+              Recuerde por precaución mire sus espejos antes de salir.
             </Text>
           ) : null}
         </>
