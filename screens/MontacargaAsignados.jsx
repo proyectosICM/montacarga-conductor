@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { useListarElementos } from "../Hooks/CRUDHooks";
-import { carrilesURL, salidaConductorURL } from "../API/urlsApi";
+import { cambiarEstadoURL, carrilesURL, salidaConductorURL } from "../API/urlsApi";
 import globalStyles from "../Styles/general";
 import axios from "axios";
 import { useRedirectEffect } from "../Hooks/useRedirectEffect";

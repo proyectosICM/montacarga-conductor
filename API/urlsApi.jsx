@@ -5,3 +5,4 @@ export const carrilesURL = `https://api-montacargas-production.up.railway.app/ap
 export const asignarMont = `${carrilesURL}/asignarMontacargas/`
 export const salidaConductorURL = `${carrilesURL}/salidaConductor/`
 export const finAuxiliarURL = `${carrilesURL}/finAuxiliar/`
+export const cambiarEstadoURL = `${carrilesURL}/cambiarEstado/`
