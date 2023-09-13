@@ -24,8 +24,6 @@ export function MontacargaAsignados() {
       const requestData = {
         salida: true,
       };
-      console.log(`${salidaConductorURL}${carrilId}`);
-      console.log(requestData);
       await axios.put(`${salidaConductorURL}${carrilId}`, requestData);
     }
   };
