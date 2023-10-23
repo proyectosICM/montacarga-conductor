@@ -154,19 +154,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: "row", // Para alinear los botones en fila
+    flexDirection: "row", 
     marginBottom: 20,
   },
   button: {
     backgroundColor: "black",
-    marginRight: 10, // Espacio entre los botones
+    marginRight: 10, 
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 10, // Mayor valor para hacerlo más cuadrado
-    width: 160, // Ancho de los botones
+    borderRadius: 10,
+    width: 160, 
   },
   cargaRealizadaButton: {
-    backgroundColor: "#28A745", // Cambiar a verde cuando la carga está realizada
+    backgroundColor: "#28A745", 
   },
   instructions: {
     fontSize: 16,
@@ -190,11 +190,11 @@ const styles = StyleSheet.create({
     width: 200,
   },
   salidaConfirmadaButton: {
-    backgroundColor: "#28A745", // Cambiar a verde cuando la salida esté confirmada
+    backgroundColor: "#28A745", 
   },
   precaucionText: {
     fontSize: 16,
-    color: "red", // Cambiar el color del texto de precaución
+    color: "red", 
     fontStyle: "italic",
     marginTop: 20,
   },
