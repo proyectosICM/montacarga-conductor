@@ -1,16 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import { carrilesURL } from "../API/urlsApi.jsx";
 import { useListarElementos } from "../Hooks/CRUDHooks";
+import globalStyles, { LogoAb } from "../Styles/general.jsx";
+
+
 
 export function MenuCarrilApi() {
   const navigation = useNavigation();
@@ -43,27 +40,24 @@ export function MenuCarrilApi() {
     } else if (estadoId === 3) {
       return styles.ocupadoButton;
     }
-    return styles.libreButton; 
+    return styles.libreButton;
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Por favor seleccione el carril en el que se encuentra
-      </Text>
+      <View>
+        <Image source={LogoAb} style={globalStyles.imagenLogo} />
+      </View>
+      <Text style={styles.title}>Por favor seleccione el carril en el que se encuentra</Text>
       <FlatList
         data={carriles}
         //keyExtractor={(item) => item.id.toString()}
-        numColumns={2} 
+        numColumns={2}
         renderItem={({ item }) => (
           <View style={styles.column}>
             {item && (
               <Button
-                title={`${item.id} - ${item.estadosModel.nombre} ${
-                  item.cantidadMontacargas
-                    ? ` - ${item.cantidadMontacargas} Montacargas `
-                    : ""
-                } `}
+                title={`${item.id} - ${item.estadosModel.nombre} ${item.cantidadMontacargas ? ` - ${item.cantidadMontacargas} Montacargas ` : ""} `}
                 buttonStyle={getButtonStyle(item.estadosModel.id)}
                 onPress={() => Detalles(item.estadosModel.id, item.id)}
               />
@@ -78,7 +72,7 @@ export function MenuCarrilApi() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#63777D",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -101,17 +95,17 @@ const styles = StyleSheet.create({
   libreButton: {
     backgroundColor: "#28A745", // Verde para botones libres
     marginBottom: 5,
-    width: 120,
+    width: 150,
   },
   ocupadoButton: {
     backgroundColor: "#DC3545", // Rojo para botones ocupados
     marginBottom: 5,
-    width: 120,
+    width: 150,
   },
   pendienteButton: {
     backgroundColor: "#FFC107", // Amarillo para botones pendientes
     marginBottom: 5,
-    width: 120,
+    width: 150,
   },
   scanButton: {
     backgroundColor: "#007BFF", // Azul para botón de escanear QR

@@ -1,11 +1,15 @@
 import { StyleSheet } from "react-native";
 
+
+export const LogoAb = require('../Styles/logoab.png');
+
+
 const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#63777D",
   },
   title: {
     fontSize: 24,
@@ -13,6 +17,16 @@ const globalStyles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     padding: 10,
+  },
+  imagenLogo: {
+    width: 350,  
+    height: 150, 
+    margin: 15
+  },
+  subLogo: {
+    width: 250,  
+    height: 100, 
+    margin: 15
   },
   text: {
     fontSize: 16,
